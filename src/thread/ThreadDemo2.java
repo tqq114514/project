@@ -9,10 +9,12 @@ public class ThreadDemo2 {
        /*创建线程并指派任务*/
         Thread thread1 = new Thread(r1);
         Thread thread2 = new Thread(r2);
+
         thread1.start();
         thread2.start();
     }
 }
+/**/
 class MyRunnable1 implements Runnable{
     @Override
     public void run() {
