@@ -15,14 +15,14 @@ public class ThreadDemo3 {
         };
         /*
         * */
-         Runnable r2 = new Runnable() {
+         /*Runnable r2 = new Runnable() {
             public void run() {
                 for (int i = 0; i < 1000; i++) {
                     System.out.println("我是查水表的");
                 }
             }
         };
-        Thread t2 = new Thread(r2);
+        Thread t2 = new Thread(r2);*/
 
 
         /*单独定义线程任务,并使用lambda表达式创建*/
@@ -39,6 +39,12 @@ public class ThreadDemo3 {
                 System.out.println("open door");
             }
         });*/
+
+        Thread t2 = new Thread(()->{
+                for(int i =0;i<400;i++){
+                    System.out.println("open door");
+                }
+        });
 
         t1.start();
         t2.start();

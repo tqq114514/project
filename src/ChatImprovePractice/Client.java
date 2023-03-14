@@ -1,40 +1,40 @@
-package socket;
+package ChatImprovePractice;
 
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
+/*多线程聊天客户端，连接客户端发送消息*/
 public class Client {
+
     private Socket socket;
     public Client(){
         try {
-            System.out.println("正在连接服务器");
-           /* socket = new Socket("176.17.9.23",8088);*/
-            socket = new Socket("localhost",23333);
-            /*socket = new Socket("176.17.9.44",8088);*/
-            System.out.println("与服务器连接成功");
+            System.out.println("初始化客户端");
+             socket = new Socket("127.0.0.1",9999);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    public void start(){
+
+    public void Start(){
         try {
             OutputStream os = socket.getOutputStream();
             OutputStreamWriter osw = new OutputStreamWriter(os, StandardCharsets.UTF_8);
             BufferedWriter bw = new BufferedWriter(osw);
             PrintWriter pw = new PrintWriter(bw,true);
-            System.out.println("请按行输入要传输的消息：");
             Scanner scanner = new Scanner(System.in);
+            System.out.println("请输入聊天内容：");
             while (true){
-                String line = scanner.nextLine();
-                pw.println(line);
-                if("exit".equals(line)){
+                String s = scanner.nextLine();
+                if("exit".equals(s)){
                     break;
                 }
+                pw.println(s);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace();  /*流用完要关，切记*/
         }finally {
             try {
                 socket.close();
@@ -46,6 +46,6 @@ public class Client {
 
     public static void main(String[] args) {
         Client client = new Client();
-        client.start();
+        client.Start();
     }
 }
