@@ -1,18 +1,17 @@
 package ChatImprovePractice;
 
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 /*多线程聊天服务端，完成多人连接聊天*/
 public class Server {
     /*利用构造方法启动服务端*/
     private ServerSocket ss;
+    private ArrayList<PrintWriter> allList = new ArrayList<>();
     public Server() {
         try {
             System.out.println("初始化聊天室");
@@ -48,15 +47,16 @@ public class Server {
     /*在多线程中处理多客户端连接和接受信息的功能,
      * 建立ClientHandler专门用于处理线程及接受聊天内容
      * 写成Server的内部类*/
-    static class ClientHandler implements Runnable {
+     private class ClientHandler implements Runnable {
 
-        private final Socket socket;
-        private String host;
+        private  Socket socket;
+        private  String host;
 
         /*利用构造方法的时机，将参数传递过来，并将值赋给私有成员变量保存*/
         public  ClientHandler(Socket socket) {
             this.socket = socket;
-            String host = socket.getInetAddress().getHostAddress();
+            host = socket.getInetAddress().getHostAddress();
+            /*System.out.println(socket.getInetAddress());*/
         }
         @Override
         public void run() {
@@ -65,9 +65,21 @@ public class Server {
                 InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
                 BufferedReader br = new BufferedReader(isr);
 
+                /*将客户端发过来的流分发到其他客户端*/
+                OutputStream os = socket.getOutputStream();
+                OutputStreamWriter osw = new OutputStreamWriter(os,StandardCharsets.UTF_8);
+                BufferedWriter bw = new BufferedWriter(osw);
+                PrintWriter pw = new PrintWriter(bw,true);
+                /*把客户端发来的流全部装到arraylist集合里*/
+                allList.add(pw);
+
                 String message;
                 while ((message = br.readLine())!=null){
-                    System.out.println(host+"发过来的数据为"+message);
+                    System.out.println(host +"发过来的数据为"+message);
+                    /*遍历allList集合，输出里面所有的流*/
+                    for (PrintWriter stream : allList){
+                        stream.println(host +"广播的数据为"+message);
+                    }
                 }
 
             } catch (IOException e) {

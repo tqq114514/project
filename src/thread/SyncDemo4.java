@@ -34,7 +34,7 @@ class  Foo{
             e.printStackTrace();
         }
     }
-    public void methodB(){
+    public synchronized void methodB(){
         try {
             Thread thread = Thread.currentThread();
             System.out.println(thread.getName()+"正在执行B方法");

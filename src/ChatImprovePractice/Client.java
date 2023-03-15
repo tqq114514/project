@@ -24,6 +24,12 @@ public class Client {
             OutputStreamWriter osw = new OutputStreamWriter(os, StandardCharsets.UTF_8);
             BufferedWriter bw = new BufferedWriter(osw);
             PrintWriter pw = new PrintWriter(bw,true);
+
+            /*获取来自服务端的输入流*/
+            InputStream is = socket.getInputStream();
+            InputStreamReader isr = new InputStreamReader(is,StandardCharsets.UTF_8);
+            BufferedReader br = new BufferedReader(isr);
+
             Scanner scanner = new Scanner(System.in);
             System.out.println("请输入聊天内容：");
             while (true){
@@ -32,6 +38,8 @@ public class Client {
                     break;
                 }
                 pw.println(s);
+                s = br.readLine();
+                System.out.println(s);
             }
         } catch (IOException e) {
             e.printStackTrace();  /*流用完要关，切记*/

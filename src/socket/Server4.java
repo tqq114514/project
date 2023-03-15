@@ -86,7 +86,7 @@ public class Server4 {
                     System.out.println(host+ "客户端发到服务端的消息为：" + message);
                     /*遍历allOut,给所有客户端发消息*/
                     for(PrintWriter out :allOut){
-                        out.println(host+ "客户端转发的消息为：" + message);
+                        out.println(host+ "客户端转发给你的消息为：" + message);
                     }
                 }
             } catch (IOException e) {

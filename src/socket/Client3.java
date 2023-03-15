@@ -10,8 +10,8 @@ public class Client3 {
     public Client3(){
         try {
             System.out.println("正在连接服务器");
-            socket = new Socket("176.17.9.23",8088);
-           /* socket = new Socket("localhost",23333);*/
+           /* socket = new Socket("176.17.9.23",8088);*/
+            socket = new Socket("localhost",23333);
             /*socket = new Socket("176.17.9.44",8088);*/
             System.out.println("与服务器连接成功");
         } catch (IOException e) {
