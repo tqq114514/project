@@ -14,7 +14,7 @@ public class SortPoint {
         list.add(new Point(8,2));
         list.add(new Point(6,5));
         System.out.println(list);
-        /*使用匿名内部类，以使该方法只供自己使用，不允许重写接口中的方法*/
+        /*使用匿名内部类，以使该方法只供自己使用，不允许重写接口中的方法添加新功能*/
         Collections.sort(list, new Comparator<Point>() {
             @Override
             public int compare(Point o1, Point o2) {

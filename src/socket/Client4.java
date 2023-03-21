@@ -1,6 +1,7 @@
 package socket;
 
 import java.io.*;
+import java.net.Proxy;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;

@@ -115,8 +115,10 @@ public class Server5 {
             System.out.println(host+ "客户端发到服务端的消息为：" + message);
             /*遍历allOut,给所有客户端发消息*/
             /*新循环是迭代器，迭代器要求遍历过程中不能用集合方法增删元素，所以需要和上面的增删互斥*/
-            for(PrintWriter out :allOut){
-                out.println(message);
+            synchronized(allOut){
+                for(PrintWriter out :allOut){
+                    out.println(message);
+                }
             }
         }
     }

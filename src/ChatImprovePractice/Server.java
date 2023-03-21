@@ -1,6 +1,8 @@
 package ChatImprovePractice;
 
 
+import sun.plugin2.message.Message;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -60,6 +62,7 @@ public class Server {
         }
         @Override
         public void run() {
+            PrintWriter pw = null;
             try {
                 InputStream is = socket.getInputStream();
                 InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
@@ -69,24 +72,46 @@ public class Server {
                 OutputStream os = socket.getOutputStream();
                 OutputStreamWriter osw = new OutputStreamWriter(os,StandardCharsets.UTF_8);
                 BufferedWriter bw = new BufferedWriter(osw);
-                PrintWriter pw = new PrintWriter(bw,true);
+                pw = new PrintWriter(bw,true);
                 /*把客户端发来的流全部装到arraylist集合里*/
-                allList.add(pw);
+                synchronized (allList) {
+                    allList.add(pw);
+                }
+                /*广播当前加入的人数*/
+                sendMessage(host+"上线了，当前聊天室的人数为："+allList.size());
 
                 String message;
                 while ((message = br.readLine())!=null){
-                    System.out.println(host +"发过来的数据为"+message);
-                    /*遍历allList集合，输出里面所有的流*/
-                    for (PrintWriter stream : allList){
-                        stream.println(host +"广播的数据为"+message);
-                    }
+                    sendMessage(host+"说"+message);
                 }
 
             } catch (IOException e) {
                 e.printStackTrace();
+            }finally {
+                /*进行收尾工作，将退出聊天室的流删掉，广播剩余的用户数量，最后关闭socket，回收资源*/
+                synchronized (allList) {
+                    allList.remove(pw);
+                }
+
+                sendMessage(host+"下线了，当前聊天室的人数为："+allList.size());
+
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
         }
+        public void sendMessage(String message){
+            System.out.println(host +"发过来的数据为"+message);
+            /*遍历allList集合，输出里面所有的流*/
+            /*新循环是迭代器，迭代器要求遍历过程中不能用集合方法增删元素，所以必须和前述的增删操作互斥*/
+            synchronized(allList){
+                for (PrintWriter stream : allList){
+                    stream.println(host +"广播的数据为"+message);
+                }
+            }
+        }
     }
-
 }
